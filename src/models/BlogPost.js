@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     title: DataTypes.STRING,
     content: DataTypes.STRING,
-    user_id: DataTypes.INTEGER,
+    userId: DataTypes.INTEGER,
     published: DataTypes.DATE,
     updated: DataTypes.DATE,
   },
@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Post.associate = (models) => {
-    Post.hasOne(models.User,
-      { foreignKey: 'user_id', as: 'blog_posts' });
+    Post.belongsTo(models.User,
+      { foreignKey: 'userId', as: 'user' });
   };
 
   return Post;
