@@ -1,32 +1,27 @@
-require('dotenv/config');
 const jwt = require('jsonwebtoken');
 const service = require('../service/user.service');
+const errorMap = require('../utils/errorMap');
 
-const isBodyValid = (email, password) => email && password;
+const createUser = async (req, res) => {
+  const { displayName, email, password, image } = req.body;
 
-const userInput = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await (await service.findUser(email)).message.dataValues;
-  console.log(user);
+  const newUser = await service.createUser(displayName, email, password, image);
+  console.log(newUser);
+  
   const secret = process.env.JWT_SECRET || 'suaSenhaSecreta';
-
   const jwtConfig = {
     expiresIn: '7d',
     algorithm: 'HS256',
   };
+  const token = jwt.sign({ data: { displayName, email, image } }, secret, jwtConfig);
 
-  if (!isBodyValid(email, password)) {
-    return res.status(400).json({ message: 'Some required fields are missing' });
-  }
-  if (!user || user.password !== password) {
-    return res.status(400).json({ message: 'Invalid fields' });
+  if (newUser.type) {
+    return res.status(errorMap.mapError(newUser.type)).json(newUser.message);
   }
 
-  const token = jwt.sign({ data: { userEmail: email } }, secret, jwtConfig);
-
-  return res.status(200).json({ token });
+  return res.status(201).json({ token });
 };
 
 module.exports = {
-  userInput,
+  createUser,
 };
