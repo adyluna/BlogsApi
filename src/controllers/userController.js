@@ -3,10 +3,9 @@ const service = require('../service/user.service');
 const errorMap = require('../utils/errorMap');
 
 const createUser = async (req, res) => {
-  const { displayName, email, password, image } = req.body;
+  const { displayName, email, image } = req.body;
 
-  const newUser = await service.createUser(displayName, email, password, image);
-  console.log(newUser);
+  const newUser = await service.createUser(req.body);
   
   const secret = process.env.JWT_SECRET || 'suaSenhaSecreta';
   const jwtConfig = {

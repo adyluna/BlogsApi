@@ -19,6 +19,8 @@ const createUser = async (user) => {
     image,
   });
 
+  console.log(newUser);
+
   if (!newUser) {
     return { type: 'CREATE_USER_FAIL', message: 'User already exists' };
   }

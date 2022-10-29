@@ -1,15 +1,15 @@
 const Joi = require('joi');
 const service = require('../service/user.service');
 
-const validateEmail = (email) => Joi.string().min(3).required().email()
-.validate(email);
+const validateEmail = (email) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+  });
 
-const userAlreadyExists = async (email) => {
-  const user = await service.findUser(email);
-  return user;
+  return schema.validate(email);
 };
 
-const body = async (req, res) => {
+const body = async (req, res, next) => {
   const { displayName, email, password } = req.body;
 
   if (displayName.length < 8) {
@@ -22,13 +22,16 @@ const body = async (req, res) => {
     .status(400).json({ message: '"password" length must be at least 6 characters long' });
   }
 
-  if (!validateEmail(email)) {
+  if (validateEmail({ email }).error) {
     return res.status(400).json({ message: '"email" must be a valid email' });
   }
 
-  if ((await !userAlreadyExists(email)).type) {
+  const { message } = await service.findUser(email);
+  if (await message.dataValues) {
     return res.status(409).json({ message: 'User already registered' });
   }
+
+  next();
 };
 
 module.exports = {
