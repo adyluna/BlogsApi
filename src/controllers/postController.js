@@ -6,15 +6,15 @@ const createNewPost = async (req, res) => {
   const { message } = await req.userInfo;
   const { id } = message.dataValues;
 
-  await Promise.all(categoryIds.map(async (categoryId) => {
+  const result = await Promise.all(categoryIds.map(async (categoryId) => {
     const categoryExists = await categoryService.findCategoryById(categoryId);
     if (!categoryExists) {
       return res.status(400).json({ message: 'one or more "categoryIds" not found' });
     }
   }));
 
-  if (!title || !content || !categoryIds) {
-    return res.status(400).json({ message: 'Some required fields are missing' });
+  if (result[0]) {
+    return res.status(400).json({ message: 'one or more "categoryIds" not found' });
   }
 
   const addedPost = await postService.addNewPost(title, content, categoryIds, id);
