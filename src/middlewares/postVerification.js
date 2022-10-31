@@ -1,3 +1,5 @@
+// const categoryService = require('../service/category.service');
+
 const validatePost = async (req, res, next) => {
   const { title, content, categoryIds } = req.body;
 
