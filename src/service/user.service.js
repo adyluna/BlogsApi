@@ -1,5 +1,15 @@
 const { User } = require('../models');
 
+const findUserById = async (id) => {
+  const result = await User.findByPk(id);
+  
+  if (result) {
+    delete result.dataValues.password;
+  }
+
+  return result;
+};
+
 const findUser = async (email) => {
   const singleUser = await User.findOne({ where: { email } });
 
@@ -41,4 +51,5 @@ module.exports = {
   findUser,
   createUser,
   findAllUsers,
+  findUserById,
 };

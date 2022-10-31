@@ -2,6 +2,17 @@ const jwt = require('jsonwebtoken');
 const service = require('../service/user.service');
 const errorMap = require('../utils/errorMap');
 
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+  const user = await service.findUserById(id);
+
+  if (!user) {
+    return res.status(404).json({ message: 'User does not exist' });
+  }
+
+  return res.status(200).json(user);
+};
+
 const getAllUsers = async (_req, res) => {
   const users = await service.findAllUsers();
 
@@ -30,4 +41,5 @@ const createUser = async (req, res) => {
 module.exports = {
   createUser,
   getAllUsers,
+  getUserById,
 };
