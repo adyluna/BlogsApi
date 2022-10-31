@@ -9,7 +9,7 @@ const validateEmail = (email) => {
   return schema.validate(email);
 };
 
-const body = async (req, res, next) => {
+const validateBody = async (req, res, next) => {
   const { displayName, email, password } = req.body;
 
   if (displayName.length < 8) {
@@ -35,5 +35,5 @@ const body = async (req, res, next) => {
 };
 
 module.exports = {
-  body,
+  validateBody,
 };

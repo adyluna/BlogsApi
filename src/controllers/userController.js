@@ -2,6 +2,12 @@ const jwt = require('jsonwebtoken');
 const service = require('../service/user.service');
 const errorMap = require('../utils/errorMap');
 
+const getAllUsers = async (_req, res) => {
+  const users = await service.findAllUsers();
+
+  return res.status(200).json(users.message);
+};
+
 const createUser = async (req, res) => {
   const { displayName, email, image } = req.body;
 
@@ -23,4 +29,5 @@ const createUser = async (req, res) => {
 
 module.exports = {
   createUser,
+  getAllUsers,
 };
