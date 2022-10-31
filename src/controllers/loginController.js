@@ -7,7 +7,6 @@ const isBodyValid = (email, password) => email && password;
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await (await service.findUser(email)).message.dataValues;
-  console.log(user);
   const secret = process.env.JWT_SECRET || 'suaSenhaSecreta';
 
   const jwtConfig = {
