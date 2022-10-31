@@ -7,9 +7,7 @@ const isBodyValid = (email, password) => email && password;
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await (await service.findUser(email)).message.dataValues;
-  const { id, displayName } = user;
   const secret = process.env.JWT_SECRET || 'suaSenhaSecreta';
-  console.log(user);
 
   const jwtConfig = {
     expiresIn: '7d',
@@ -22,8 +20,6 @@ const login = async (req, res) => {
   if (!user || user.password !== password) {
     return res.status(400).json({ message: 'Invalid fields' });
   }
-
-  req.userInfo = { id, displayName, email };
 
   const token = jwt.sign({ data: { userEmail: email } }, secret, jwtConfig);
 
