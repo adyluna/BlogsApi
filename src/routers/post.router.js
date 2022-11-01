@@ -6,8 +6,9 @@ const router = express.Router();
 
 router
   .post('/',
-    middlewares.postMiddleware.validatePost,
     middlewares.tokenMiddleware,
+    middlewares.postMiddleware.validatePostCategory,
+    middlewares.postMiddleware.validatePostBody,
     postController.createNewPost);
 
 module.exports = router;
