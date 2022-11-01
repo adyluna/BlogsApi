@@ -11,4 +11,5 @@ router
     middlewares.postMiddleware.validatePostBody,
     postController.createNewPost);
 
+router.get('/', middlewares.tokenMiddleware, postController.findAllPosts);
 module.exports = router;
